@@ -4,7 +4,7 @@ include(cmake/version.cmake)
 
 option(MSDF_ATLAS_BUILD_STANDALONE "Build the msdf-atlas-gen standalone executable" ON)
 option(MSDF_ATLAS_USE_VCPKG "Use vcpkg package manager to link project dependencies" ON)
-option(MSDF_ATLAS_USE_SKIA "Build with the Skia library" ON)
+option(MSDF_ATLAS_USE_SKIA "Build with the Skia library" OFF)
 option(MSDF_ATLAS_NO_ARTERY_FONT "Disable Artery Font export and do not require its submodule" OFF)
 option(MSDF_ATLAS_MSDFGEN_EXTERNAL "Do not build the msdfgen submodule but find it as an external package" OFF)
 option(MSDF_ATLAS_INSTALL "Generate installation target" OFF)
@@ -75,17 +75,8 @@ endif()
 # Version is specified in vcpkg.json
 project(msdf-atlas-gen VERSION ${MSDF_ATLAS_VERSION} LANGUAGES CXX)
 
-if(MSDF_ATLAS_MSDFGEN_EXTERNAL)
-    if(NOT TARGET msdfgen::msdfgen)
-        find_package(msdfgen REQUIRED)
-    endif()
-else()
-    add_subdirectory(msdfgen)
-endif()
+add_subdirectory(msdfgen)
 find_package(Threads REQUIRED)
-if(NOT MSDFGEN_DISABLE_PNG AND NOT TARGET PNG::PNG)
-    find_package(PNG REQUIRED)
-endif()
 
 file(GLOB_RECURSE MSDF_ATLAS_HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "msdf-atlas-gen/*.h" "msdf-atlas-gen/*.hpp")
 file(GLOB_RECURSE MSDF_ATLAS_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "msdf-atlas-gen/*.cpp")
@@ -115,9 +106,6 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT m
 
 target_compile_features(msdf-atlas-gen PUBLIC cxx_std_11)
 target_link_libraries(msdf-atlas-gen PRIVATE Threads::Threads)
-if(NOT MSDFGEN_DISABLE_PNG)
-    target_link_libraries(msdf-atlas-gen PRIVATE PNG::PNG)
-endif()
 target_link_libraries(msdf-atlas-gen PUBLIC msdfgen::msdfgen)
 
 if(BUILD_SHARED_LIBS AND WIN32)
