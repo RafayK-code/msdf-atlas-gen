@@ -8,7 +8,7 @@ option(MSDF_ATLAS_USE_SKIA "Build with the Skia library" OFF)
 option(MSDF_ATLAS_NO_ARTERY_FONT "Disable Artery Font export and do not require its submodule" OFF)
 option(MSDF_ATLAS_MSDFGEN_EXTERNAL "Do not build the msdfgen submodule but find it as an external package" OFF)
 option(MSDF_ATLAS_INSTALL "Generate installation target" OFF)
-option(MSDF_ATLAS_DYNAMIC_RUNTIME "Link dynamic runtime library instead of static" OFF)
+option(MSDF_ATLAS_DYNAMIC_RUNTIME "Link dynamic runtime library instead of static" ON)
 option(BUILD_SHARED_LIBS "Generate dynamic library files instead of static" OFF)
 
 if(NOT MSDF_ATLAS_MSDFGEN_EXTERNAL)
